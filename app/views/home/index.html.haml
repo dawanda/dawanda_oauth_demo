@@ -1,9 +1,30 @@
-%h1= "Hello #{current_user.login}" if logged_in?
+%h1= "Hello #{current_user.login}!" if logged_in?
 
-%h2
-  Your Dawanda user data:
-= @user if @user
+- if @user
+  %h2 Your DaWanda user data:
+  %pre=@user.to_yaml
 
+- if @orders
+  %h2 Your DaWanda orders:
+
+  %h3 Statistics
+  All orders: #{@orders.size}
+  %br
+  Todays orders (#{Time.now.strftime("%Y/%m/%d")}): #{@orders_from_today.size}
+  
+  %h3 All orders
+
+  %table{:cellpadding => 0, :cellspacing => 0, :width => "100%"}
+    %tr
+      %th Order ID
+      %th Buyer
+      %th Date
+      %th Total price
+      %th Status
+    = render :partial => "order", :collection => @orders
+    
+- @orders.each do |o|
+  %pre= o.to_yaml
 
 %br
 %br
